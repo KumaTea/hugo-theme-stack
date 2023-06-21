@@ -37,6 +37,23 @@
             </div>
         {{ end }}
 
+        {{ if ne .Lastmod .Date }}
+            <div>
+                {{ partial "helper/icon" "pen" }}
+                <time class="article-lastmod">
+                    {{ if eq .Lastmod.Year .Date.Year }}
+                        {{ if eq .Lastmod.Month .Date.Month }}
+                            {{- .Lastmod.Format ( or .Site.Params.dateFormat.lastUpdatedTime "Jan 02 15:04" ) -}}
+                        {{ else }}
+                            {{- .Lastmod.Format ( or .Site.Params.dateFormat.lastUpdatedShort "Jan 02" ) -}}
+                        {{ end }}
+                    {{ else }}
+                        {{- .Lastmod.Format ( or .Site.Params.dateFormat.lastUpdated "Jan 02, 2006" ) -}}
+                    {{ end }}
+                </time>
+            </div>
+        {{ end }}
+
         {{ if $showReadingTime }}
             <div>
                 {{ partial "helper/icon" "clock" }}
