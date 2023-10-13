@@ -5,7 +5,8 @@
     {{ $pag := .Paginate ($filtered) }}
 
     <section class="article-list">
-        {{ range $index, $element := $pag.Pages }}
+        {{ $sortedPages := partial "sort-pages.html" $pag.Pages }}
+        {{ range $index, $element := $sortedPages }}
             {{ partial "article-list/default" . }}
         {{ end }}
     </section>
