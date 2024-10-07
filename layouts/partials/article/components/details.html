@@ -41,7 +41,7 @@
             </div>
         {{ end }}
 
-        {{ if ne .Lastmod .Date }}
+        {{ if or (ne .Lastmod.Year .Date.Year) (ne .Lastmod.Month .Date.Month) (ne .Lastmod.Day .Date.Day) }}
             <div>
                 {{ partial "helper/icon" "pen" }}
                 <time class="article-lastmod">
