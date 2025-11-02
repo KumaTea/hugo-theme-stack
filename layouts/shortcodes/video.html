@@ -11,4 +11,7 @@
             <a href="{{- $src -}}">link to the video</a> instead.
         </p>
     </video>
+    {{ with .Get "caption" }}
+    <div class="video-caption">{{- . -}}</div>
+    {{ end }}
 </div>

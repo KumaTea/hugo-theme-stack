@@ -415,6 +415,12 @@
             top: 0;
             border: 0;
         }
+
+        .video-caption {
+            text-align: center;
+            font-size: 1.4rem;
+            color: var(--card-text-color-secondary);
+        }
     }
 
     .gitlab-embed-snippets {
