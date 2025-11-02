@@ -1,0 +1,79 @@
+<!--
+sort-pages.html
+hugo template
+sort pages by last modified date
+if same, sort by (create) date
+passed in: $pag.Pages
+-->
+
+{{ $pagesOriginal := . }}
+{{ $pagesCount := len $pagesOriginal }}
+
+{{ $newPages := slice }}
+
+<!-- return if less than 2 pages -->
+{{ if lt $pagesCount 2 }}
+  {{ $newPages = $pagesOriginal }}
+
+{{ else }}
+
+  <!-- first sort by lastmod -->
+  {{ $pagesByLastmod := $pagesOriginal.ByLastmod }}
+
+  <!-- sort by date if lastmod is the same -->
+
+  {{ $tempPages := slice }}
+
+  {{ range seq 0 (sub $pagesCount 1) }}
+
+    <!-- if $tempPages is empty, add the first element -->
+    {{ if eq $tempPages (slice) }}
+
+      {{ $tempPages = $tempPages | append (index $pagesByLastmod .) }}
+
+
+    <!-- $tempPages is not empty -->
+    {{ else }}
+
+      <!-- if lastmod is the same, add to $tempPages -->
+      {{ if eq (index $tempPages 0).Lastmod (index $pagesByLastmod .).Lastmod }}
+
+        {{ $tempPages = $tempPages | append (index $pagesByLastmod .) }}
+
+
+      <!-- lastmod is not same -->
+      {{ else }}
+
+        <!-- sort $tempPages by date -->
+        <!-- add $tempPages to $newPages -->
+        {{ $tempPages = $tempPages.ByDate }}
+        {{ $newPages = $newPages | append $tempPages }}
+
+        <!-- reset $tempPages -->
+        {{ $tempPages = slice }}
+
+        <!-- add the current element to $tempPages -->
+        {{ $tempPages = $tempPages | append (index $pagesByLastmod .) }}
+
+      <!-- end processing lastmod -->
+      {{ end }}
+
+    <!-- end processing $tempPages -->
+    {{ end }}
+
+
+    <!-- if this is the last element, sort $tempPages by date and add to $newPages -->
+    {{ if eq $pagesCount (add . 1) }}
+
+      {{ $tempPages = $tempPages.ByDate }}
+      {{ $newPages = $newPages | append $tempPages }}
+
+    {{ end }}
+
+  <!-- end range -->
+  {{ end }}
+
+  {{ $newPages = $newPages.Reverse }}
+{{ end }}
+
+{{- return $newPages -}}

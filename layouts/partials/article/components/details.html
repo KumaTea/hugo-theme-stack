@@ -32,7 +32,28 @@
             <div>
                 {{ partial "helper/icon" "date" }}
                 <time class="article-time--published" datetime='{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}'>
-                    {{- .Date | time.Format (or .Site.Params.dateFormat.published "Jan 02, 2006") -}}
+                    {{ if eq .Date.Year time.Now.Year }}
+                        {{- .Date.Format (or .Site.Params.dateFormat.publishedShort "01-02") -}}
+                    {{ else }}
+                        {{- .Date.Format (or .Site.Params.dateFormat.published "2006-01-02") -}}
+                    {{ end }}
+                </time>
+            </div>
+        {{ end }}
+
+        {{ if or (ne .Lastmod.Year .Date.Year) (ne .Lastmod.Month .Date.Month) (ne .Lastmod.Day .Date.Day) }}
+            <div>
+                {{ partial "helper/icon" "pen" }}
+                <time class="article-lastmod">
+                    {{ if eq .Lastmod.Year time.Now.Year }}
+                        {{ if eq .Lastmod.Month time.Now.Month }}
+                            {{- .Lastmod.Format ( or .Site.Params.dateFormat.lastUpdatedTime "01-02 15:04" ) -}}
+                        {{ else }}
+                            {{- .Lastmod.Format ( or .Site.Params.dateFormat.lastUpdatedShort "01-02" ) -}}
+                        {{ end }}
+                    {{ else }}
+                        {{- .Lastmod.Format ( or .Site.Params.dateFormat.lastUpdated "2006-01-02" ) -}}
+                    {{ end }}
                 </time>
             </div>
         {{ end }}
